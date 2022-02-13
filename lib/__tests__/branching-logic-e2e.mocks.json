@@ -1,0 +1,21 @@
+{
+  "StateMachines": {
+    "BranchingLogic": {
+      "TestCases": {
+        "ErrorPath": {
+          "BackgroundCheckStep": "BackgroundCheckError"
+        }
+      }
+    }
+  },
+  "MockedResponses": {
+    "BackgroundCheckError": {
+      "0": {
+        "Throw": {
+          "Error": "Lambda.TimeoutException",
+          "Cause": "Lambda timed out."
+        }
+      }
+    }
+  }
+}
