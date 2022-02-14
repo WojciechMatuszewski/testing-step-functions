@@ -11,7 +11,6 @@
     "cdk": "cdk",
     "bootstrap": "npm run cdk bootstrap -- --qualifier=sfntesting --toolkit-stack-name SFNTestingBootstrap",
     "deploy": "npm run cdk deploy -- --hotswap && npm run env",
-    "deploy:force": "npm run cdk deploy && npm run env",
     "env": "node -r @swc-node/register ./lib/extract-env.ts SFNTestingStack"
   },
   "devDependencies": {
