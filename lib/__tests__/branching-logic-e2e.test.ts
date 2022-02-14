@@ -1,14 +1,11 @@
 import {
   CreateStateMachineCommand,
   DescribeStateMachineCommand,
-  GetExecutionHistoryCommand,
   SFNClient,
   StartExecutionCommand
 } from "@aws-sdk/client-sfn";
 import { join } from "path";
 import { GenericContainer, StartedTestContainer } from "testcontainers";
-
-const sfnClient = new SFNClient({});
 
 let container: StartedTestContainer | undefined;
 
@@ -24,7 +21,7 @@ beforeAll(async () => {
       process.env.AWS_SECRET_ACCESS_KEY as string
     )
     /**
-     * Required for federated credentials
+     * For federated credentials (for example, SSO), this environment variable is required.
      */
     .withEnv("AWS_SESSION_TOKEN", process.env.AWS_SESSION_TOKEN as string)
     .withEnv("AWS_DEFAULT_REGION", process.env.AWS_REGION)
@@ -36,6 +33,8 @@ afterAll(async () => {
 }, 15_000);
 
 test("Handles the failure of the BackgroundCheck step", async () => {
+  const sfnClient = new SFNClient({});
+
   const describeStepFunctionResult = await sfnClient.send(
     new DescribeStateMachineCommand({
       stateMachineArn: process.env.BRANCHING_LOGIC_E2E_STEP_FUNCTION_ARN
@@ -43,7 +42,6 @@ test("Handles the failure of the BackgroundCheck step", async () => {
   );
   const stepFunctionDefinition =
     describeStepFunctionResult.definition as string;
-
   const stepFunctionRoleARN = describeStepFunctionResult.roleArn as string;
 
   const sfnLocalClient = new SFNClient({
